@@ -3,9 +3,11 @@
 namespace imanilchaudhari\CurrencyConverter\Cache\Adapter;
 
 use DateInterval;
+use imanilchaudhari\CurrencyConverter\Exception\InvalidArgumentException;
 
 abstract class AbstractAdapter implements CacheAdapterInterface
 {
+
     /**
      * Interval of cache life
      *
@@ -34,7 +36,7 @@ abstract class AbstractAdapter implements CacheAdapterInterface
     public function getCacheTimeOut()
     {
         if (!$this->cacheTimeout) {
-            $this->setCacheTimeOut(DateInterval::createFromDateString('5 hours'));
+            $this->setCacheTimeOut(DateInterval::createFromDateString('+5 hours'));
         }
 
         return $this->cacheTimeout;
@@ -50,7 +52,13 @@ abstract class AbstractAdapter implements CacheAdapterInterface
     protected function isCacheExpired($fromCurrency, $toCurrency)
     {
         $cacheCreationTime = $this->getCacheCreationTime($fromCurrency, $toCurrency);
-        return (time() - $cacheCreationTime) > $this->getCacheTimeOut()->format('%s');
+
+        $interval = $this->getCacheTimeOut();
+
+        $seconds = $interval->days*86400 + $interval->h*3600
+        + $interval->i*60 + $interval->s;
+
+        return (time() - $cacheCreationTime) > $seconds;
     }
 
     /**
@@ -69,4 +77,5 @@ abstract class AbstractAdapter implements CacheAdapterInterface
      * @return int
      */
     abstract protected function getCacheCreationTime($fromCurrency, $toCurrency);
+
 }

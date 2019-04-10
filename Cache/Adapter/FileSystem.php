@@ -30,9 +30,12 @@ class FileSystem extends AbstractAdapter
      */
     public function setCachePath($cachePath)
     {
+        $cachePath = \Yii::getAlias($cachePath);
+
         if (!is_dir($cachePath)) {
             throw new Exception\CachePathNotFoundException(sprintf('Cache Path, %s does not exists', $cachePath));
         }
+
         $this->cachePath = $cachePath;
 
         return $this;

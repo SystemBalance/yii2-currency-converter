@@ -1,10 +1,11 @@
 <?php
 
-namespace imanilchaudhari\CurrencyConverter;
+namespace imanilchaudhari\CurrencyConverter\Provider;
 
-class CountryToCurrency
+use yii\base\Component;
+
+class AbstractProvider extends Component
 {
-
     /**
      * @var array    key contains country code, value contains respective country currency
      */
@@ -254,7 +255,8 @@ class CountryToCurrency
     /**
      * Gets Currency code by Country code
      *
-     * @param  string $countryCode Country code
+     * @param string $countryCode Country code
+     *
      * @return string
      * @throws Exception\InvalidArgumentException
      */
@@ -265,5 +267,24 @@ class CountryToCurrency
         }
 
         return self::$currencies[$countryCode];
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return bool|string
+     */
+    protected function getPage($url)
+    {
+        $ch = curl_init();
+        $timeout = 0;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)');
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $rawdata = curl_exec($ch);
+        curl_close($ch);
+
+        return $rawdata;
     }
 }

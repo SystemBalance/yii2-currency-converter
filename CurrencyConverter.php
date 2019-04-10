@@ -43,7 +43,7 @@ class CurrencyConverter implements CurrencyConverterInterface
             $this->getCacheAdapter()->createCache($fromCurrency, $toCurrency, $rate);
         }
 
-        return $rate * $amount;
+        return $rate / $amount;
     }
 
     /**
@@ -138,7 +138,7 @@ class CurrencyConverter implements CurrencyConverterInterface
             $currency = $data;
         } elseif (is_array($data)) {
             if (isset($data['country'])) {
-                $currency = CountryToCurrency::getCurrency($data['country']);
+                $currency = $this->getRateProvider()->getCurrency($data['country']);
             } elseif (isset($data['currency'])) {
                 $currency = $data['currency'];
             } else {
