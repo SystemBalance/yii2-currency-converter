@@ -19,7 +19,7 @@ class m190411_131356_init extends Migration
             'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
         ]);
 
-        $this->createIndex('undx', 'currency_rate', ['from', 'to', 'nominal', 'rate', 'created_at'], true);
+        $this->createIndex('undx', 'currency_rate', ['from', 'to', 'rate', 'created_at'], true);
     }
 
     /**
