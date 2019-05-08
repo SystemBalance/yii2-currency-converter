@@ -41,7 +41,7 @@ class RCBApi extends AbstractProvider implements ProviderInterface
         $parsedData = json_decode($rawdata, true);
 
         if(isset($parsedData["Valute"]) && isset($parsedData["Valute"]["EUR"]) && isset($parsedData["Valute"][$toCurrency]["Value"])){
-            return $parsedData["Valute"][$toCurrency]["Value"];
+            return $parsedData["Valute"][$toCurrency]["Value"]/$parsedData["Valute"][$toCurrency]["Nominal"];
         }
 
         return 1;
